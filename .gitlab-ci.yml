@@ -1,0 +1,25 @@
+#DONOT MODIFY THIS FILE
+stages:
+  - containerization
+  - deploy
+
+#MASTER | PRODUCTION
+containerization:
+  stage: containerization
+  tags:
+    - pbeth-runner
+  only:
+    - main
+  script:
+    - docker build --no-cache --build-arg NODE_ENV=production --build-arg PORT="$PORT" --build-arg MONGO="$MONGO" --build-arg JWT_SECRET="$JWT_SECRET" --build-arg JWT_LIFETIME="$JWT_LIFETIME" --build-arg BASE_URL="$BASE_URL" --build-arg CHAPA_LIVE_KEY="$CHAPA_LIVE_KEY" --build-arg CHAPA_LIVE_SECRET="$CHAPA_LIVE_SECRET" --build-arg SANTIM_PAY_PRIVATE_KEY="$SANTIM_PAY_PRIVATE_KEY" --build-arg SANTIM_PAY_PUBLIC_KEY="$SANTIM_PAY_PUBLIC_KEY" --build-arg SANTIM_PAY_MERCHANT_ID="$SANTIM_PAY_MERCHANT_ID" --build-arg SANTIM_PAY_TOKEN="$SANTIM_PAY_TOKEN" --build-arg CLIENT_BASE_URL="$CLIENT_BASE_URL"  --build-arg EMAIL_PASSWORD="$EMAIL_PASSWORD" --build-arg EMAIL_USER="$EMAIL_USER" --build-arg BASE_URL1="$BASE_URL1" -t lms_api_img .
+deployment:
+  stage: deploy
+  tags:
+    - pbeth-runner
+  only:
+    - main
+  script:
+    - docker stop lms_api_container || true
+    - docker rm lms_api_container || true
+    - docker run -d --restart unless-stopped --name=lms_api_container -p 2122:2122 lms_api_img
+ 

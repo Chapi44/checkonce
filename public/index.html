@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DASH Stream Test</title>
+    <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
+</head>
+<body>
+    <h1>DASH Stream Test</h1>
+    <video id="videoPlayer" controls></video>
+    <script>
+        (function() {
+            var courseId = '666016bc1689f0ac503447c4'; // Replace with your actual course ID
+            var lessonId = '666017011689f0ac503447c9'; // Replace with your actual lesson ID
+            var url = `http://localhost:4500/api/v1/course/${courseId}/stream-dash/${lessonId}`;
+            var player = dashjs.MediaPlayer().create();
+            player.initialize(document.querySelector("#videoPlayer"), url, true);
+            player.setAutoSwitchQualityFor('distance');
+        })();
+    </script>
+</body>
+</html>
